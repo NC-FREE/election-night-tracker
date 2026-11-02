@@ -77,7 +77,7 @@ body.et_transparent_nav #page-container #top-header,body.et_transparent_nav #pag
   // #nch-37 style links on this page open the tracker on that view.
   // VERSION makes browsers fetch the newest tracker instead of an old saved copy. Change it whenever index.html is updated on GitHub.
   var VERSION='2026-11-02g';
-  var url=test?TRACKER_URL+'?test=1'+String.fromCharCode(38)+'v='+VERSION+(location.hash||'#sw'):TRACKER_URL+'?v='+VERSION+(location.hash||'#sw');
+  var url=test?TRACKER_URL+'?test=1'+String.fromCharCode(38)+'v='+VERSION+(location.hash||''):TRACKER_URL+'?v='+VERSION+(location.hash||'');
   // Start loading the tracker after the rest of the page has loaded, so the site's own header and menu are never held up by it.
   function go(){if(!f.getAttribute('src'))f.src=url;}
   if(document.readyState==='complete')go();else window.addEventListener('load',go);setTimeout(go,4000);
