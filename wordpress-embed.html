@@ -21,7 +21,7 @@ body.et_transparent_nav #page-container #top-header,body.et_transparent_nav #pag
     <div class="ncen-rule"></div>
     <p class="ncen-dek">Unofficial results for statewide, congressional and legislative races, from the NC State Board of Elections. Results update automatically as counties report.</p>
   </div></section>
-  <iframe id="ncen" data-src="https://brendanhiggs.github.io/election-night-tracker/?v=2026-11-02c" title="North Carolina Election Night Results" style="width:100%;border:0;display:block;height:1600px" loading="eager" allow="clipboard-write"></iframe>
+  <iframe id="ncen" data-src="https://brendanhiggs.github.io/election-night-tracker/?v=2026-11-02e" title="North Carolina Election Night Results" style="width:100%;border:0;display:block;height:1600px" loading="eager" allow="clipboard-write"></iframe>
   <noscript><p><a href="https://brendanhiggs.github.io/election-night-tracker/">Open the NC Election Night Results</a></p></noscript>
 </div>
 <script>
@@ -32,7 +32,7 @@ body.et_transparent_nav #page-container #top-header,body.et_transparent_nav #pag
   var test=/[?&]test\b/.test(location.search);
   // #nch-37 style links on this page open the tracker on that view.
   // VERSION makes browsers fetch the newest tracker instead of an old saved copy. Change it whenever index.html is updated on GitHub.
-  var VERSION='2026-11-02c';
+  var VERSION='2026-11-02e';
   var url=test?TRACKER_URL+'?test=1'+String.fromCharCode(38)+'v='+VERSION+(location.hash||''):TRACKER_URL+'?v='+VERSION+(location.hash||'');
   // Start loading the tracker after the rest of the page has loaded, so the site's own header and menu are never held up by it.
   function go(){if(!f.getAttribute('src'))f.src=url;}
@@ -43,8 +43,8 @@ body.et_transparent_nav #page-container #top-header,body.et_transparent_nav #pag
   // Pull the banner up to the top of the page so it sits behind the site's header, as on the early voting page.
   function fitTop(){var hdr=document.getElementById('main-header');if(hdr){if(hdr.classList.contains('et-fixed-header'))return;}
     wrap.style.marginTop='0';var y=window.pageYOffset||0;var wrapTop=wrap.getBoundingClientRect().top+y;
-    var pageTop=document.documentElement.getBoundingClientRect().top+y;var bar=document.getElementById('wpadminbar');var barH=bar?bar.offsetHeight:0;
-    wrap.style.marginTop=(-(wrapTop-pageTop-barH))+'px';}
+    var bar=document.getElementById('wpadminbar');var barH=bar?bar.getBoundingClientRect().bottom+y:0;
+    wrap.style.marginTop=(-(wrapTop-barH))+'px';}
   function layout(){bleed();fitTop();}
   layout();window.addEventListener('resize',layout);window.addEventListener('load',layout);setTimeout(layout,1500);
   var origin=new URL(TRACKER_URL).origin;
