@@ -1,27 +1,30 @@
-<!-- NC Election Night Results: paste this whole block into a WordPress "Custom HTML" block.
-     If you move the site (custom domain, NCFREE organization), change TRACKER_URL below. -->
-<div id="ncen-wrap" style="width:100%;max-width:1180px;margin:0 auto">
-  <iframe id="ncen" title="North Carolina Election Night Results"
-    style="width:100%;border:0;display:block;min-height:1400px;overflow:hidden" scrolling="no" loading="eager"
-    allow="clipboard-write"></iframe>
-  <noscript><p><a href="https://brendanhiggs.github.io/nc-election-night-tracker/">Open the NC Election Night Results</a></p></noscript>
+<!-- NC Election Night Results: paste this whole block into a Divi "Code" module (or a WordPress "Custom HTML" block).
+     The tracker shows even if WordPress strips the script below; the script only sizes the frame and passes on ?test.
+     If the site moves, change the address in src="..." and in TRACKER_URL. -->
+<div id="ncen-wrap" style="width:100%;max-width:none;margin:0">
+  <iframe id="ncen" src="https://brendanhiggs.github.io/election-night-tracker/" title="North Carolina Election Night Results" style="width:100%;border:0;display:block;height:1600px" loading="eager" allow="clipboard-write"></iframe>
+  <noscript><p><a href="https://brendanhiggs.github.io/election-night-tracker/">Open the NC Election Night Results</a></p></noscript>
 </div>
 <script>
 (function(){
-  var TRACKER_URL='https://brendanhiggs.github.io/nc-election-night-tracker/';
+  var TRACKER_URL='https://brendanhiggs.github.io/election-night-tracker/';
   var f=document.getElementById('ncen');
   // ?test on this page's address turns on the tracker's test mode (reads NCSBE's 2024 file).
   var test=/[?&]test\b/.test(location.search);
   // #nch-37 style links on this page open the tracker on that view.
-  f.src=TRACKER_URL+(test?'?test':'')+(location.hash||'');
+  if(test){f.src=TRACKER_URL+'?test'+(location.hash||'');}else if(location.hash){f.src=TRACKER_URL+location.hash;}
+  // Stretch the tracker from edge to edge of the browser window, whatever the width of the Divi row it sits in.
+  var wrap=document.getElementById('ncen-wrap');
+  function bleed(){wrap.style.marginLeft='0';var w=document.documentElement.clientWidth,l=wrap.getBoundingClientRect().left;wrap.style.width=w+'px';wrap.style.marginLeft=(-l)+'px';}
+  bleed();window.addEventListener('resize',bleed);window.addEventListener('load',bleed);
   var origin=new URL(TRACKER_URL).origin;
   window.addEventListener('message',function(e){
     if(e.origin!==origin||!e.data||!e.data.ncen)return;
-    if(e.data.ncen==='height'&&e.data.h>200){f.style.minHeight='0';f.style.height=e.data.h+'px';}
+    if(e.data.ncen==='height'){if(e.data.h>200){f.style.height=e.data.h+'px';}}
     sendView();
-    if(e.data.ncen==='hash'&&typeof e.data.hash==='string'&&/^[\w-]{1,40}$/.test(e.data.hash)){
+    if(e.data.ncen==='hash'){if(typeof e.data.hash==='string'){if(/^[\w-]{1,40}$/.test(e.data.hash)){
       try{history.replaceState(null,'','#'+e.data.hash);}catch(err){}
-    }
+    }}}
   });
   // Tell the tracker which part of it is on screen, so its "Latest from NCFREE" card stays in the corner of the screen.
   function sendView(){var r=f.getBoundingClientRect();if(!f.contentWindow)return;
