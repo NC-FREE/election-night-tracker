@@ -21,18 +21,18 @@ body.et_transparent_nav #page-container #top-header,body.et_transparent_nav #pag
     <div class="ncen-rule"></div>
     <p class="ncen-dek">Unofficial results for statewide, congressional and legislative races, from the NC State Board of Elections. Results update automatically as counties report.</p>
   </div></section>
-  <iframe id="ncen" data-src="https://brendanhiggs.github.io/election-night-tracker/?v=2026-11-02e" title="North Carolina Election Night Results" style="width:100%;border:0;display:block;height:1600px" loading="eager" allow="clipboard-write"></iframe>
-  <noscript><p><a href="https://brendanhiggs.github.io/election-night-tracker/">Open the NC Election Night Results</a></p></noscript>
+  <iframe id="ncen" data-src="https://nc-free.github.io/election-night-tracker/?v=2026-11-02f" title="North Carolina Election Night Results" style="width:100%;border:0;display:block;height:1600px" loading="eager" allow="clipboard-write"></iframe>
+  <noscript><p><a href="https://nc-free.github.io/election-night-tracker/">Open the NC Election Night Results</a></p></noscript>
 </div>
 <script>
 (function(){
-  var TRACKER_URL='https://brendanhiggs.github.io/election-night-tracker/';
+  var TRACKER_URL='https://nc-free.github.io/election-night-tracker/';
   var f=document.getElementById('ncen');
   // ?test on this page's address turns on the tracker's test mode (reads NCSBE's 2024 file).
   var test=/[?&]test\b/.test(location.search);
   // #nch-37 style links on this page open the tracker on that view.
   // VERSION makes browsers fetch the newest tracker instead of an old saved copy. Change it whenever index.html is updated on GitHub.
-  var VERSION='2026-11-02e';
+  var VERSION='2026-11-02f';
   var url=test?TRACKER_URL+'?test=1'+String.fromCharCode(38)+'v='+VERSION+(location.hash||''):TRACKER_URL+'?v='+VERSION+(location.hash||'');
   // Start loading the tracker after the rest of the page has loaded, so the site's own header and menu are never held up by it.
   function go(){if(!f.getAttribute('src'))f.src=url;}

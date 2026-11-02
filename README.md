@@ -29,22 +29,14 @@ The 2024 replay is a separate page and is not part of this site.
 | `wordpress-embed.html` | The block to paste into the ncfree.org page |
 | `.nojekyll` | Tells GitHub Pages to serve the files as they are |
 
-## One-time setup
+## Where it lives
 
-1. **Upgrade to GitHub Pro** (github.com/settings/billing → Plans). Pro is needed to publish a Pages site from a private repository.
-   The site itself is still public; only the repository (code) stays private.
-2. **Create the repository** `nc-election-night-tracker` as **Private**.
-3. **Add the files.**
-   - With GitHub Desktop: clone the repository, copy these files in, then Commit and Push.
-   - In the browser: use "Add file → Upload files."
-   - On a Mac, `.nojekyll` is hidden. Press Cmd+Shift+. in Finder to see it.
-4. **Turn on Pages.** Go to Settings → Pages → Build and deployment and set:
-   - Source: **Deploy from a branch**
-   - Branch: **main**, folder **/ (root)**
-   - Then click **Save**.
-5. **Check the site.** After a minute or two it is live at `https://brendanhiggs.github.io/nc-election-night-tracker/`.
-   - Open it with `?test` added to the end. The banner should say "Test mode: connected to NCSBE."
-6. **WordPress.** Paste `wordpress-embed.html` into a Custom HTML block on a draft page, then preview it with `?test` (or `&test` on a preview address).
+- **Repository:** `NC-FREE/election-night-tracker` on GitHub. It must stay **public**, since GitHub Pages serves the site from it.
+- **Site:** `https://nc-free.github.io/election-night-tracker/` (GitHub Pages, deployed from the `main` branch, root folder).
+  Open it with `?test` added to the end; the banner should say "Test mode: connected to NCSBE."
+- **ncfree.org:** the "2026 Election Results" page shows the site through the WPCode snippet "2026 Election Results" (`[wpcode id="259096"]`), whose code is `wordpress-embed.html`.
+  If the site's address ever changes, update the three addresses in that snippet. Preview the page with `&test` on a preview address.
+- The repository was moved here from Brendan Higgins's account on Nov. 2, 2026. GitHub does not redirect the old `brendanhiggs.github.io` address.
 
 ## Latest from NCFREE and race calls
 
