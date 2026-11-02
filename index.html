@@ -324,6 +324,18 @@ details.more summary{cursor:pointer;font-weight:700;color:var(--accent);font-siz
 .foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 20px;padding:14px 18px 0;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
 .foot span{max-width:100%}
 @media (max-width:600px){.ptable{font-size:13px}.ptable th,.ptable td{padding:6px 5px}.ptable th{letter-spacing:.03em}.controls{gap:10px}.replayctl input[type=range]{width:120px}.seg button{padding:0 9px}}
+
+/* Phones (added Nov. 2, 2026): tabs in one even grid with 44px tap targets, no empty Race row on Key races,
+   larger map buttons, and no scroll box inside the page for the precinct table. */
+@media (max-width:600px){
+  #tabs{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));width:100%}
+  #tabs button{height:44px;padding:0 6px;border-bottom:1px solid var(--line)}
+  .controls>.field:first-child{width:100%}
+  #raceField[style*="hidden"]{display:none}
+  .field select{height:44px;width:100%}
+  .zoombtns button{width:40px;height:40px}
+  .tbl-wrap{max-height:none}
+}
 </style>
 
 <div class="wrap">
@@ -1138,7 +1150,7 @@ function renderAll(rezoom){{const P=curData();if(P&&P.snap&&S.focus&&S.focus.typ
 let xOpenState=false;
 const xSeenKey='ncen-x-seen',xMinKey='ncen-x-min';
 const xGet=k=>{try{return localStorage.getItem(k)||'';}catch(e){return '';}},xSet=(k,v)=>{try{localStorage.setItem(k,v);}catch(e){}};
-let xMin=xGet(xMinKey)==='1';
+let xMin=xGet(xMinKey)?xGet(xMinKey)==='1':matchMedia('(max-width:700px)').matches; /* phones start with the updates card minimized */
 function xSeen(){return xGet(xSeenKey);}
 function xMarkSeen(){if(xPosts&&xPosts.length)xSet(xSeenKey,xPosts[0].id);}
 function xBadge(){const b=$('#xBadge');if(!b||!xPosts)return;const seen=xSeen();
@@ -1153,7 +1165,7 @@ function xHover(){const card=$('#xHover'),pill=$('#xhPill');if(!xPosts||!xPosts.
       return `<article class="xh-item" data-id="${p.id}"><span class="xpic" aria-hidden="true">${esc(ini)}${pic?`<img src="${esc(pic)}" alt="">`:''}</span><div class="xh-meta"><b class="xname">${esc(p.user)}</b> · ${esc(p.when.replace(/ ET$/,''))}</div><p class="xtext"></p></article>`;}).join('');
     want.forEach(p=>xOembed(p).then(o=>{const el=list.querySelector(`[data-id="${p.id}"]`);if(!o||!el)return;if(o.name)el.querySelector('.xname').textContent=o.name;el.querySelector('.xtext').textContent=o.text.replace(/\s*\n+\s*/g,' ');}));}
   if(!card.hidden)xMarkSeen();xBadge();}
-function xSetMin(m){xMin=m;xSet(xMinKey,m?'1':'');xHover();(m?$('#xhPill'):$('#xhAll')).focus();}
+function xSetMin(m){xMin=m;xSet(xMinKey,m?'1':'0');xHover();(m?$('#xhPill'):$('#xhAll')).focus();}
 function xOpen(on){xOpenState=on;$('#xDrawer').hidden=!on;$('#xhAll').setAttribute('aria-expanded',on);
   if(on){xMarkSeen();}xHover();if(on)$('#xClose').focus();else (xMin?$('#xhPill'):$('#xhAll')).focus();}
 $('#xhAll').addEventListener('click',()=>xOpen(true));
@@ -1246,8 +1258,8 @@ let xStale=false;
 (function callInit(){if(EDITION==='replay')return;callLoad();setInterval(()=>{if(!document.hidden)callLoad();},20000);})();
 /* When shown inside an iframe (e.g. GitHub Pages embedded on ncfree.org), tell the host page our height and current view
    so it can size the frame and keep the address bar in step. The host listens for {ncen:'height'|'hash'}. */
-if(EMBED){let last=0;const send=()=>{const h=Math.ceil(document.documentElement.getBoundingClientRect().height);if(Math.abs(h-last)>2){last=h;try{parent.postMessage({ncen:'height',h},'*');}catch(e){}}};
-  try{new ResizeObserver(send).observe(document.body);}catch(e){setInterval(send,1000);}addEventListener('load',send);send();}
+if(EMBED){let last=0;const send=()=>{const w=document.querySelector('.wrap');const h=Math.ceil((w||document.documentElement).getBoundingClientRect().height); /* measure the content, not the page, so the frame can shrink when a shorter view opens */if(Math.abs(h-last)>2){last=h;try{parent.postMessage({ncen:'height',h},'*');}catch(e){}}};
+  try{const ro=new ResizeObserver(send);ro.observe(document.body);const w=document.querySelector('.wrap');if(w)ro.observe(w);}catch(e){setInterval(send,1000);}addEventListener('load',send);send();}
 
 let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>hideTip(),100);});
 })();
