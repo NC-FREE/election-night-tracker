@@ -140,9 +140,11 @@ body.et_transparent_nav #page-container #top-header,body.et_transparent_nav #pag
     }}}
   });
   // Tell the tracker which part of it is on screen, so its "Latest from NCFREE" card stays in the corner of the screen.
+  // The visible area starts below the site's fixed menu bar (desktop), so panels never open underneath it.
   function sendView(){var r=f.getBoundingClientRect();if(!f.contentWindow)return;
-    var top=Math.max(0,-r.top),h=Math.min(window.innerHeight,r.bottom)-Math.max(0,r.top);
+    var hdr=document.getElementById('main-header'),hb=0;if(hdr){var hp=getComputedStyle(hdr).position;if(hp==='fixed'||hp==='sticky')hb=Math.max(0,hdr.getBoundingClientRect().bottom);}
+    var vt=Math.max(hb,r.top),top=Math.max(0,vt-r.top),h=Math.min(window.innerHeight,r.bottom)-vt;
     f.contentWindow.postMessage({ncen:'view',top:top,h:h},origin);}
-  window.addEventListener('scroll',sendView,{passive:true});window.addEventListener('resize',sendView);f.addEventListener('load',sendView);
+  var svT;window.addEventListener('scroll',function(){sendView();clearTimeout(svT);svT=setTimeout(sendView,450);},{passive:true});window.addEventListener('resize',sendView);f.addEventListener('load',sendView);
 })();
 </script>
