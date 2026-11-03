@@ -68,3 +68,7 @@ Add `?test` (or `#test`) to the address. The live view then reads NCSBE's Novemb
 ## Updating the tracker
 
 Replace `index.html` and push. GitHub Pages republishes in about a minute. Browsers may keep the old copy for up to 10 minutes.
+
+## Background map layers (Nov. 3, 2026)
+
+The neighboring-states/lakes layer and the "Cities & roads" layer are served as separate gzip files, `geo-bgfull.json.gz` and `geo-ref.json.gz`, instead of being embedded in `index.html`. The page fetches them after it renders, which cuts the first download on phones from about 3.3 MB to about 1.1 MB. If either file fails to load, the tracker still works without that background layer. A build that embeds them again (`<script type="text/plain" id="geo-bgfull">` / `id="geo-ref"`) also still works, since the page reads an embedded copy first. When either file changes, update the `?v=` value in `EXT_GZ` in `index.html`.
