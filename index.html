@@ -695,7 +695,7 @@ async function fetchFirst(urls){
 }
 async function load(src,{quiet}={}){
   const cfg=CONFIG[src];let got,fromFallback=false;
-  try{got=await fetchFirst(cfg.urls);}catch(e){if(!cfg.fallback)throw e;got=await fetchFirst([cfg.fallback]);fromFallback=true;}
+  try{got=await fetchFirst(cfg.urls);}catch(e){if(!cfg.fallback||(quiet&&S.data[src]))throw e;got=await fetchFirst([cfg.fallback]);fromFallback=true;}
   if(quiet&&S.data[src]&&got.lastMod&&got.lastMod===S.lastMod[src])return false;
   const text=await bytesToText(got.buf);const P=parse(text);P.fromFallback=fromFallback;P.url=got.url;P.lastMod=got.lastMod;P.fetched=new Date();
   S.lastMod[src]=got.lastMod;S.data[src]=P;if(src==='live')S.liveOK=!fromFallback;
@@ -704,8 +704,8 @@ async function load(src,{quiet}={}){
   return true;
 }
 let timer=null,countdown=0;
-function schedule(){clearInterval(timer);const cfg=CONFIG.live;if(!cfg.refreshSec||!S.liveOK)return;countdown=cfg.refreshSec;
-  timer=setInterval(async()=>{countdown--;if(S.src==='live')renderStatus();if(countdown<=0){countdown=cfg.refreshSec;try{const changed=await load('live',{quiet:true});if(changed&&S.src==='live')renderAll(false);else if(S.src==='live')renderStatus();}catch(e){S.refreshErr=String(e.message||e);renderStatus();}}},1000);}
+function schedule(){clearInterval(timer);const cfg=CONFIG.live;if(!cfg.refreshSec)return;countdown=cfg.refreshSec;
+  timer=setInterval(async()=>{countdown--;if(S.src==='live')renderStatus();if(countdown<=0){countdown=cfg.refreshSec;try{const changed=await load('live',{quiet:true});S.refreshErr=null;if(changed&&S.src==='live')renderAll(false);else if(S.src==='live')renderStatus();}catch(e){S.refreshErr=String(e.message||e);renderStatus();}}},1000);}
 
 /* ---------- status / header ---------- */
 function renderStatus(){
@@ -722,7 +722,7 @@ function renderStatus(){
   let st='';
   if(S.src==='live'){
     if(P.fromFallback)st=TEST?(EDITION==='live'?'Could not reach NCSBE; showing the 2026 pre-election file':'Using the built-in copy of the 2024 file'):'Showing NCSBE’s pre-election file (no votes)';
-    else{const lm=P.lastMod?new Date(P.lastMod):null;const ET={timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'};st=(lm?'NCSBE file updated '+lm.toLocaleString('en-US',ET)+' ET':'Loaded '+P.fetched.toLocaleString('en-US',ET)+' ET')+(S.liveOK&&countdown>0?` · checking again in ${countdown}s`:'')+(S.refreshErr?' · last check failed, retrying':'');}
+    else{const lm=P.lastMod?new Date(P.lastMod):null;const ET={timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'};st=(lm?'NCSBE file updated '+lm.toLocaleString('en-US',ET)+' ET':'Loaded '+P.fetched.toLocaleString('en-US',ET)+' ET')+(countdown>0?` · checking again in ${countdown}s`:'')+(S.refreshErr?' · last check failed, retrying':'');}
   }else{const rs=replayState(S.rpi);st=rs.final?'Certified results: NCSBE final results media file':`NCSBE results feed at ${fmtClock(rs.time)} ET, ${rs.time.toLocaleDateString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',year:'numeric'})}, as saved by the Internet Archive`;}
   $('#stamp').textContent=st;$('#stampPill').hidden=!st;
   const b=$('#banner');
