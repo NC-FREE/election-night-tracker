@@ -21,7 +21,7 @@ body.et_transparent_nav #page-container #top-header,body.et_transparent_nav #pag
     <h1>North Carolina Election Night Results</h1>
     <div class="ncen-rule"></div>
     <p class="ncen-dek">Unofficial results for statewide, congressional and legislative races, from the NC State Board of Elections. Results update automatically as counties report.</p>
-    <p class="ncen-updated" id="ncen-updated" style="font-size:16px;line-height:1.4;opacity:.92;font-family:inherit">Results begin after polls close at 7:30 p.m. on Tuesday, Nov. 3, 2026.</p>
+    <p class="ncen-updated" id="ncen-updated" style="font-size:16px;line-height:1.4;opacity:.92;font-family:inherit">Election Day is today, Tuesday, Nov. 3. Polls are open from 6:30 a.m. to 7:30 p.m., and results begin after polls close. Page updated <time datetime="2026-11-03T11:30:00Z">Nov. 3, 2026, 6:30 a.m. ET</time>.</p>
 <script>
 /* NCEN-UPDATED: visible "last updated" time from the State Board results file (added Nov. 2, 2026) */
 (function(){
@@ -38,7 +38,7 @@ body.et_transparent_nav #page-container #top-header,body.et_transparent_nav #pag
     if(iso) o.dateModified=iso;
     ld.textContent=JSON.stringify(o);
   }
-  setLd(null);
+  setLd('2026-11-03T11:30:00Z'); /* Election Day morning update; replaced by the State Board file time after polls close */
   function check(){
     var ac=new AbortController();
     fetch(SRC+'?t='+Math.floor(Date.now()/30000),{cache:'no-cache',signal:ac.signal}).then(function(r){
