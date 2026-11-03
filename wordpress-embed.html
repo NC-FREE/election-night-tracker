@@ -145,6 +145,6 @@ body.et_transparent_nav #page-container #top-header,body.et_transparent_nav #pag
     var hdr=document.getElementById('main-header'),hb=0;if(hdr){var hp=getComputedStyle(hdr).position;if(hp==='fixed'||hp==='sticky')hb=Math.max(0,hdr.getBoundingClientRect().bottom);}
     var vt=Math.max(hb,r.top),top=Math.max(0,vt-r.top),h=Math.min(window.innerHeight,r.bottom)-vt;
     f.contentWindow.postMessage({ncen:'view',top:top,h:h},origin);}
-  var svT;window.addEventListener('scroll',function(){sendView();clearTimeout(svT);svT=setTimeout(sendView,450);},{passive:true});window.addEventListener('resize',sendView);f.addEventListener('load',sendView);
+  var svT;window.addEventListener('scroll',function(){sendView();clearTimeout(svT);svT=setTimeout(sendView,450);},{passive:true});window.addEventListener('resize',sendView);f.addEventListener('load',sendView);setInterval(sendView,1000);
 })();
 </script>
