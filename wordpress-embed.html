@@ -21,7 +21,7 @@ body.et_transparent_nav #page-container #top-header,body.et_transparent_nav #pag
     <h1>North Carolina Election Night Results</h1>
     <div class="ncen-rule"></div>
     <p class="ncen-dek">Unofficial results for statewide, congressional and legislative races, from the NC State Board of Elections. Results update automatically as counties report.</p>
-    <p class="ncen-updated" id="ncen-updated" style="font-size:16px;line-height:1.4;opacity:.92;font-family:inherit">Election Day is today, Tuesday, Nov. 3. Polls are open from 6:30 a.m. to 7:30 p.m., and results begin after polls close. Page updated <time datetime="2026-11-03T11:30:00Z">Nov. 3, 2026, 6:30 a.m. ET</time>.</p>
+    <p class="ncen-updated" id="ncen-updated" style="font-size:16px;line-height:1.4;opacity:.92;font-family:inherit">Election Day is today, Tuesday, Nov. 3. Polls are open from 6:30 a.m. to 7:30 p.m., and results begin after polls close. Page updated <time datetime="2026-11-03T19:40:00Z">Nov. 3, 2026, 2:40 p.m. ET</time>.</p>
 <script>
 /* NCEN-UPDATED: visible "last updated" time from the State Board results file (added Nov. 2, 2026) */
 (function(){
@@ -38,7 +38,7 @@ body.et_transparent_nav #page-container #top-header,body.et_transparent_nav #pag
     if(iso) o.dateModified=iso;
     ld.textContent=JSON.stringify(o);
   }
-  setLd('2026-11-03T11:30:00Z'); /* Election Day morning update; replaced by the State Board file time after polls close */
+  setLd('2026-11-03T19:40:00Z'); /* Election Day afternoon update (What to expect tonight); replaced by the State Board file time after polls close */
   function check(){
     var ac=new AbortController();
     fetch(SRC+'?t='+Math.floor(Date.now()/30000),{cache:'no-cache',signal:ac.signal}).then(function(r){
@@ -71,8 +71,21 @@ body.et_transparent_nav #page-container #top-header,body.et_transparent_nav #pag
 #ncen-about .ncen-races a{font-weight:700;text-decoration:none;color:#00698F}
 #ncen-about .ncen-races a:hover{text-decoration:underline}
 #ncen-about .ncen-sec+.ncen-sec{margin-top:40px}
+#ncen-about .ncen-steps{max-width:760px;margin:0 0 14px;padding:0 0 0 20px;font-size:17px;line-height:1.6;color:#062735}
+#ncen-about .ncen-steps li{margin:0 0 8px;padding:0}
 </style>
 <section id="ncen-about"><div class="ncen-in">
+<div class="ncen-sec">
+<h2>What to expect tonight</h2>
+<p>Polls close at 7:30 p.m. Results appear in stages as county boards of elections report them, and the times vary by county.</p>
+<ul class="ncen-steps">
+<li><strong>About 7:30 to 9 p.m.:</strong> Mail-in absentee ballots that county boards have already approved are reported first.</li>
+<li><strong>About 7:30 to 9:30 p.m.:</strong> Early voting results come in.</li>
+<li><strong>About 8:30 p.m. to midnight:</strong> Election Day results from each precinct are added as officials deliver them to county boards.</li>
+</ul>
+<p>If the State Board extends voting hours at any polling place, that county's results wait until every polling place there has closed.</p>
+<p>Some ballots are added after tonight, including military and overseas ballots that arrive by the deadline, approved provisional ballots, and absentee ballots that voters correct after a problem is found. That's why totals can still change in the days after the election. County boards certify their results at canvass meetings 10 days after Election Day, on Friday, Nov. 13. Until then, every number on this page is unofficial.</p>
+</div>
 <div class="ncen-sec">
 <h2>About these results</h2>
 <p>This page shows live, unofficial results from the North Carolina State Board of Elections for the Nov. 3, 2026 general election. It covers the U.S. Senate race, all 14 U.S. House seats, the NC Supreme Court and Court of Appeals races, three proposed constitutional amendments, and all 170 seats in the NC Senate and NC House. Results are shown statewide and by county, district and precinct.</p>
