@@ -21,6 +21,38 @@ body.et_transparent_nav #page-container #top-header,body.et_transparent_nav #pag
     <h1>North Carolina Election Night Results</h1>
     <div class="ncen-rule"></div>
     <p class="ncen-dek">Unofficial results for statewide, congressional and legislative races, from the NC State Board of Elections. Results update automatically as counties report.</p>
+    <p class="ncen-updated" id="ncen-updated" style="font-size:16px;line-height:1.4;opacity:.92;font-family:inherit">Results begin after polls close at 7:30 p.m. on Tuesday, Nov. 3, 2026.</p>
+<script>
+/* NCEN-UPDATED: visible "last updated" time from the State Board results file (added Nov. 2, 2026) */
+(function(){
+  var SRC='https://dl.ncsbe.gov/ENRS/2026_11_03/results_pct_20261103.zip';
+  var START=Date.parse('2026-11-04T00:30:00Z'); /* polls close, 7:30 p.m. ET Nov. 3 */
+  var el=document.getElementById('ncen-updated'); if(!el) return;
+  var ld=document.createElement('script'); ld.type='application/ld+json'; document.head.appendChild(ld);
+  function fmt(d){
+    return d.toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'})
+      .replace(/^(\w{3}) /,function(m,mo){return (mo==='May'?mo:mo+'.')+' ';}).replace(/ (AM|PM)$/,function(m,ap){return ' '+(ap==='AM'?'a.m.':'p.m.');})+' ET';
+  }
+  function setLd(iso){
+    var o={'@context':'https://schema.org','@type':'WebPage','name':'NC Election Results 2026: Live Results by Race','url':'https://ncfree.org/nc-election-results/','datePublished':'2026-11-02T17:56:43-05:00','publisher':{'@type':'Organization','name':'NC FreeEnterprise Foundation','url':'https://ncfree.org/'}};
+    if(iso) o.dateModified=iso;
+    ld.textContent=JSON.stringify(o);
+  }
+  setLd(null);
+  function check(){
+    var ac=new AbortController();
+    fetch(SRC+'?t='+Math.floor(Date.now()/30000),{cache:'no-cache',signal:ac.signal}).then(function(r){
+      var lm=r.headers.get('last-modified'); ac.abort();
+      if(!r.ok||!lm) return;
+      var d=new Date(lm); if(isNaN(d)||d.getTime()<START) return;
+      el.innerHTML='Results last updated <time datetime="'+d.toISOString()+'">'+fmt(d)+'</time>, from the NC State Board of Elections.';
+      setLd(d.toISOString());
+    }).catch(function(){});
+  }
+  check(); setInterval(check,60000);
+})();
+</script>
+
   </div></section>
   <iframe id="ncen" data-src="https://nc-free.github.io/election-night-tracker/?v=2026-11-02h" title="North Carolina Election Night Results" style="width:100%;border:0;display:block;height:1600px" loading="eager" allow="clipboard-write"></iframe>
   <noscript><p><a href="https://nc-free.github.io/election-night-tracker/">Open the NC Election Night Results</a></p></noscript>
