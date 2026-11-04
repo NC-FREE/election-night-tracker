@@ -225,6 +225,7 @@ details.more summary{cursor:pointer;font-weight:700;color:var(--accent);font-siz
 .kgroup{display:grid;gap:8px}
 .kgroup>h3{display:flex;align-items:center;gap:8px;font-size:16px;margin:0}
 .kgroup>h3 small{font:400 13px var(--f-body);color:var(--muted)}
+.kgroup.kdone .kcard .kh .rchip{display:inline-block}
 .kgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
 .kcard{font:inherit;color:inherit;text-align:left;border:1px solid var(--line);background:var(--surface);padding:9px 10px 8px;display:grid;gap:4px;cursor:pointer;min-width:0}
 .kcard:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent-soft) 40%,var(--surface))}
@@ -899,9 +900,12 @@ function renderKey(){const P=curData();const km=$('#keyMain');if(!P){km.innerHTM
   let h=`<div class="phead"><h2>Key races</h2></div>`;
   h+=`<div class="ktop">${['nch','ncs'].map(cat=>`<div class="kbox"><h3><button class="link" data-gotab="${cat}" style="text-decoration:none;color:var(--accent)">${CAT_LABEL[cat]}</button> <span class="kseats">${SEATS[cat]} seats</span></h3>${seatBar(cat)}</div>`).join('')}</div>`;
   h+=`<div class="ktop${sw.length>2?' k3':''}">${sw.map(swBox).join('')}</div>`;
-  const groups=[['T','Tossups'],['LD','Lean Democrat'],['LR','Lean Republican'],['KD','Likely Democrat'],['KR','Likely Republican']];
+  const groups=[['T','Tossups'],['LD','Lean Democrat'],['LR','Lean Republican'],['KD','Likely Democrat'],['KR','Likely Republican']];const done=[];
   groups.forEach(([code,lab])=>{const items=Object.entries(RT.r).filter(([k,r])=>r[0]===code).map(([k,r])=>{const [cat,d]=k.split('-');const c=P.contests.find(x=>x.cat===cat&&x.dist===+d);return c?{c,r}:null;}).filter(Boolean).sort((a,b)=>(a.c.cat===b.c.cat?0:a.c.cat==='nch'?-1:1)||a.c.dist-b.c.dist);
-    if(!items.length)return;h+=`<div class="kgroup"><h3>${rchip(code)}</h3><div class="kgrid">${items.map(({c,r})=>keyCard(c,r[0],r[1])).join('')}</div></div>`;});
+    /* Races with every precinct reported move to one group at the bottom, so the rating groups show only races still counting (Nov. 3, 2026). */
+    const live=items.filter(({c})=>!(c.nt>0&&c.nr>=c.nt));done.push(...items.filter(x=>!live.includes(x)));
+    if(!live.length)return;h+=`<div class="kgroup"><h3>${rchip(code)}</h3><div class="kgrid">${live.map(({c,r})=>keyCard(c,r[0],r[1])).join('')}</div></div>`;});
+  if(done.length)h+=`<div class="kgroup kdone"><h3><span class="rchip" style="background:var(--sunk);color:var(--ink)">All precincts reported</span><small>${done.length} race${done.length>1?'s':''}</small></h3><div class="kgrid">${done.map(({c,r})=>keyCard(c,r[0],r[1])).join('')}</div></div>`;
   h+=`<div class="meta">Ratings: NCFREE, as of ${esc(RT.asOf)}.${S.src==='replay'?' Results shown are from 2024.':''}</div>`;
   km.innerHTML=h;
   km.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>goRace(b.dataset.go));
