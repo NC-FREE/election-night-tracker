@@ -12,6 +12,11 @@ body.et_transparent_nav #page-container #top-header,body.et_transparent_nav #pag
 #ncen-hero h1{font-size:clamp(34px,5vw,48px);line-height:1.1;font-weight:700}
 #ncen-hero .ncen-rule{width:56px;height:4px;background:#92C74C}
 #ncen-hero .ncen-dek{font-size:20px;line-height:1.45;max-width:760px}
+#ncen-hero #ncen-delay{background:#fff;border-left:8px solid #92C74C;border-radius:4px;padding:18px 22px;max-width:760px;box-sizing:border-box;box-shadow:0 6px 22px rgba(0,30,45,.28)}
+#ncen-hero #ncen-delay p{color:#062735;margin:0;padding:0}
+#ncen-hero #ncen-delay .ncen-delay-h{font-size:25px;line-height:1.2;font-weight:700;color:#00698F;margin:0 0 8px}
+#ncen-hero #ncen-delay .ncen-delay-b{font-size:17px;line-height:1.5}
+@media (max-width:600px){#ncen-hero #ncen-delay{padding:14px 16px;border-left-width:6px}#ncen-hero #ncen-delay .ncen-delay-h{font-size:20px}#ncen-hero #ncen-delay .ncen-delay-b{font-size:15px}}
 @media (max-width:820px){#ncen-hero{padding:120px 0 40px}}
 @media (max-width:600px){#ncen-hero{padding:100px 0 26px}#ncen-hero .ncen-in{gap:10px}#ncen-hero .ncen-eyebrow{font-size:11px;letter-spacing:2px}#ncen-hero h1{font-size:28px}#ncen-hero .ncen-dek{font-size:16px;line-height:1.4}#ncen-about .ncen-races li{margin-bottom:11px}}
 </style>
@@ -21,7 +26,7 @@ body.et_transparent_nav #page-container #top-header,body.et_transparent_nav #pag
     <h1>North Carolina Election Night Results</h1>
     <div class="ncen-rule"></div>
     <p class="ncen-dek">Unofficial results for statewide, congressional and legislative races, from the NC State Board of Elections. Results update automatically as counties report.</p>
-    <p class="ncen-updated" id="ncen-updated" style="font-size:16px;line-height:1.4;opacity:.92;font-family:inherit">Election Day is today, Tuesday, Nov. 3. Polls are open from 6:30 a.m. to 7:30 p.m., and results begin after polls close. Page updated <time datetime="2026-11-03T19:40:00Z">Nov. 3, 2026, 2:40 p.m. ET</time>.</p>
+    <p class="ncen-updated" id="ncen-updated" style="font-size:16px;line-height:1.4;opacity:.92;font-family:inherit">Results are unofficial until county boards finish their canvass on Friday, Nov. 13.</p>
 <script>
 /* NCEN-UPDATED: visible "last updated" time from the State Board results file (added Nov. 2, 2026) */
 (function(){
@@ -46,6 +51,7 @@ body.et_transparent_nav #page-container #top-header,body.et_transparent_nav #pag
       if(!r.ok||!lm) return;
       var d=new Date(lm); if(isNaN(d)||d.getTime()<START) return;
       el.innerHTML='Results last updated <time datetime="'+d.toISOString()+'">'+fmt(d)+'</time>, from the NC State Board of Elections.';
+      var dl=document.getElementById('ncen-delay'); if(dl) dl.style.display='none'; /* hide the delay notice once results arrive */
       setLd(d.toISOString());
     }).catch(function(){});
   }
@@ -76,20 +82,16 @@ body.et_transparent_nav #page-container #top-header,body.et_transparent_nav #pag
 </style>
 <section id="ncen-about"><div class="ncen-in">
 <div class="ncen-sec">
-<h2>What to expect tonight</h2>
-<p>Polls close at 7:30 p.m. Results appear in stages as county boards of elections report them, and the times vary by county.</p>
-<ul class="ncen-steps">
-<li><strong>About 7:30 to 9 p.m.:</strong> Mail-in absentee ballots that county boards have already approved are reported first.</li>
-<li><strong>About 7:30 to 9:30 p.m.:</strong> Early voting results come in.</li>
-<li><strong>About 8:30 p.m. to midnight:</strong> Election Day results from each precinct are added as officials deliver them to county boards.</li>
-</ul>
-<p>If the State Board extends voting hours at any polling place, that county's results wait until every polling place there has closed.</p>
-<p>Some ballots are added after tonight, including military and overseas ballots that arrive by the deadline, approved provisional ballots, and absentee ballots that voters correct after a problem is found. That's why totals can still change in the days after the election. County boards certify their results at canvass meetings 10 days after Election Day, on Friday, Nov. 13. Until then, every number on this page is unofficial.</p>
+<h2>What happens next</h2>
+<p>Counting continues after Election Day. Military and overseas ballots that arrive by the deadline, provisional ballots that county boards approve, and absentee ballots that voters corrected are added to the totals over the coming days. That's why some results can still change.</p>
+<p>County boards certify their results at canvass meetings on Friday, Nov. 13. Until then, every number on this page is unofficial.</p>
+<p>A trailing candidate can request a recount if the margin is 1% or less of the votes cast in a legislative or other non-statewide race. In a statewide race, a recount can be requested if the margin is half of 1% or 10,000 votes, whichever is less. Requests are due shortly after the canvass.</p>
+<p>This page keeps updating as the State Board posts new totals. For NCFREE's analysis of what the results mean for the General Assembly, read <a href="https://ncfree.org/2026/11/the-democratic-tsunami-what-happened-in-nc/">The Democratic Tsunami: What happened in NC</a>.</p>
 </div>
 <div class="ncen-sec">
 <h2>About these results</h2>
 <p>This page shows live, unofficial results from the North Carolina State Board of Elections for the Nov. 3, 2026 general election. It covers the U.S. Senate race, all 14 U.S. House seats, the NC Supreme Court and Court of Appeals races, three proposed constitutional amendments, and all 170 seats in the NC Senate and NC House. Results are shown statewide and by county, district and precinct.</p>
-<p>Polls close at 7:30 p.m., and results begin to appear as county boards of elections report them. The tracker checks the State Board's results file every minute and updates on its own, so there is no need to reload the page.</p>
+<p>Results appear as county boards of elections report them. The tracker checks the State Board's results file every minute and updates on its own, so there is no need to reload the page.</p>
 <p>All results are unofficial until counties finish their canvass and the State Board certifies them. Official results are available from the <a href="https://www.ncsbe.gov/results-data">NC State Board of Elections</a>. Race ratings come from NCFREE's 2026 general election analysis and <a href="/partisan-district-scores/">Partisan District Scores</a>.</p>
 </div>
 <div class="ncen-sec">
