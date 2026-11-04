@@ -831,7 +831,9 @@ function renderLegend(){
     $('#legend').innerHTML=`<div class="lgrow"><span class="lg">${A?esc(shortName(A)):''}</span><span class="ramp dv">${sw(ca,[...LEG_M].reverse())}${sw(cb,LEG_M)}</span><span class="lg">${B?esc(shortName(B)):''}</span>${nov}</div><div class="cap">Shade shows the size of the lead: under 5, 10, 20, 30 and 30+ points.</div>`;
   }else{
     const po=x=>x.party==='DEM'?0:x.party==='REP'?2:1;const parties=(cands.length?[...cands]:[{party:'DEM'},{party:'REP'}]).sort((x,y)=>po(x)-po(y));
-    const [A,B]=[parties[0],parties[1]||{party:'REP'}];const ca=partyColor(A.party,A.name),cb=partyColor(B.party,B.name);
+    /* The district-map ramp always runs Democratic to Republican; a district led by a third-party or unaffiliated candidate keeps its own
+       color on the map but no longer takes the Republican end of the legend (Nov. 3, 2026). */
+    const A=parties.find(x=>x.party==='DEM')||{party:'DEM'},B=parties.find(x=>x.party==='REP')||{party:'REP'};const ca=partyColor(A.party,A.name),cb=partyColor(B.party,B.name);
     const DM=[0,0.07,0.15,0.25],sw=(col,ms)=>ms.map(m=>`<i style="background:${distFill(col,m,false)}"></i>`).join('');
     const nm=x=>PARTY_NAME[x.party]||x.party||'Other';
     $('#legend').innerHTML=`<div class="lgrow"><span class="lg">${esc(nm(A))}</span><span class="ramp dv">${sw(ca,[...DM].reverse())}${sw(cb,DM)}</span><span class="lg">${esc(nm(B))}</span><span class="lg"><i style="background:${distFill(ca,0,true)}"></i><i style="background:${distFill(cb,0,true)}"></i>Called or uncontested</span>${nov}</div><div class="cap">Shade shows the size of the lead: under 5, 5–10, 10–20 and 20+ points.</div>`;
