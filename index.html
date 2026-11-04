@@ -852,7 +852,7 @@ function rchip(code,short){const d=RCODE[code];return d?`<span class="rchip" sty
 const CALLSHEET='https://docs.google.com/spreadsheets/d/e/2PACX-1vRJT5GQDCdXQ3gHK8HCSMTNi8UR3MRNEuJetbpWFrJnSKRDoIMXDoUPVO6qpZY6r4sCoCR0fNZclH0F/pub?gid=1700863077&single=true&output=csv';
 /* Fast route: the live sheet itself (needs the sheet shared as "Anyone with the link can view"); calls show within about a minute.
    If Google refuses or throttles it, the published CSV above (refreshed by Google about every 5 minutes) is used instead. */
-const CALLLIVE='https://docs.google.com/spreadsheets/d/1kXCLyWgC_qLsbRyA-5HIYZqmnsNRzFKUuRtZVQBDnRE/gviz/tq?tqx=out:csv&gid=1775540635&tq='+encodeURIComponent('select A,B');
+const CALLLIVE='https://docs.google.com/spreadsheets/d/1kXCLyWgC_qLsbRyA-5HIYZqmnsNRzFKUuRtZVQBDnRE/gviz/tq?tqx=out:csv&gid=1775540635&headers=1&tq='+encodeURIComponent('select A,B');
 let CALLS=new Map(),callStale=true,callSrc='';
 const normRace=s=>String(s||'').toLowerCase().replace(/[\u2013\u2014]/g,'-').replace(/\s+/g,' ').trim();
 function callsFromRows(rows){const m=new Map();const h=(rows[0]||[]).map(x=>String(x).trim().toLowerCase());
