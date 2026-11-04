@@ -564,7 +564,6 @@ function aggregate(P,rs){
   if(rs&&!rs.final){applySnapshot(P,rs.i);return;}
   P.snap=false;
   const rep=new Uint8Array(P.precList.length);
-  P.precList.forEach((p,i)=>{rep[i]=p.real&&(P.precEdAny.get(p.key)||0)>0?1:0;});
   P.contests.forEach(c=>{const n=c.cands.length;c.tot=new Float64Array(n);c.m=[0,1,2,3].map(()=>new Float64Array(n));c.cty=new Map();c.pre=new Map();c.adm=new Map();});
   const R=P.rows,N=R.c.length;
   for(let i=0;i<N;i++){
@@ -574,6 +573,12 @@ function aggregate(P,rs){
     if(pr.real){cc.precs.add(pi);let pe=c.pre.get(pi);if(!pe){pe=new Float64Array(c.cands.length);c.pre.set(pi,pe);}pe[k]+=ed;}
     else{let a=c.adm.get(pi);if(!a){a=new Float64Array(c.cands.length);c.adm.set(pi,a);}a[k]+=t;}
   }
+  /* A precinct counts as reported once the U.S. Senate race (on every ballot) has Election Day votes there. Counting Election Day
+     votes in any race let one county's stray judicial-race votes mark whole districts as fully reported (Nov. 3, 2026). Falls back
+     to any race only where a precinct has no top-of-ballot row. */
+  const topC=P.contests.find(c=>c.name==='US SENATE')||P.contests.filter(c=>c.cat==='sw').sort((a,b)=>b.pre.size-a.pre.size)[0];
+  P.precList.forEach((p,i)=>{if(!p.real){rep[i]=0;return;}const pe=topC&&topC.pre.get(i);
+    rep[i]=pe?(pe.reduce((a,b)=>a+b,0)>0?1:0):((P.precEdAny.get(p.key)||0)>0?1:0);});
   P.rep=rep;finishContests(P);
   P.contests.forEach(c=>{let nr=0,nt=0;c.cty.forEach(cc=>{cc.nt=cc.precs.size;cc.nr=0;cc.precs.forEach(pi=>{if(rep[pi])cc.nr++;});nr+=cc.nr;nt+=cc.nt;});c.nr=nr;c.nt=nt;});
   let tr=0,tt=0;P.precList.forEach((p,i)=>{if(p.real){tt++;if(rep[i])tr++;}});P.stRep=tr;P.stTot=tt;
